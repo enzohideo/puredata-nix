@@ -3,10 +3,12 @@
 , stdenv
 , fetchgit
 , puredata
-}:
-
-stdenv.mkDerivation rec {
-  pname = "iemguts";
+}: let
+  base = (import ./pd-lib-builder.nix {
+    pname = "iemguts";
+    inherit puredata;
+  });
+in stdenv.mkDerivation (lib.mergeAttrs base rec {
   version = "v0.4.3";
 
   src = fetchgit {
@@ -15,22 +17,8 @@ stdenv.mkDerivation rec {
     rev = version;
   };
 
-  makeFlags = [
-    "pdincludepath=${puredata}/include/pd"
-    "prefix=$(out)"
-  ];
-
-  postInstall = ''
-    mv "$out/lib/pd-externals/iemguts" "$out/"
-    rm -rf $out/lib
-  '';
-
-  buildInputs = with pkgs; [
-    puredata
-  ];
-
   meta = with lib; {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ enzohideo ];
   };
-}
+})

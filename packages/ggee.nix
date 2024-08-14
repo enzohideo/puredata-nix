@@ -3,10 +3,12 @@
 , stdenv
 , fetchFromGitHub
 , puredata
-}:
-
-stdenv.mkDerivation rec {
-  pname = "ggee";
+}: let
+  base = (import ./pd-lib-builder.nix {
+    pname = "ggee";
+    inherit puredata;
+  });
+in stdenv.mkDerivation (lib.mergeAttrs base rec {
   version = "master";
 
   src = fetchFromGitHub {
@@ -16,22 +18,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-ItLLQEO/XZ54U5dpT01EcBgg5lCG1Zbi4qOLpzUS0lU=";
   };
 
-  makeFlags = [
-    "pdincludepath=${puredata}/include/pd"
-    "prefix=$(out)"
-  ];
-
-  postInstall = ''
-    mv "$out/lib/pd-externals/ggee" "$out/"
-    rm -rf $out/lib
-  '';
-
-  buildInputs = with pkgs; [
-    puredata
-  ];
-
   meta = with lib; {
     license = licenses.tcltk;
     maintainers = with maintainers; [ enzohideo ];
   };
-}
+})
