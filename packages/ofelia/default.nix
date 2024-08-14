@@ -4,7 +4,7 @@
 , fetchurl
 , puredata
 , autoPatchelfHook
-, boost171
+, boost
 , glew
 }:
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       shared = true;
     })
   ] ++ [
-    boost171
+    boost
     glew
   ];
 

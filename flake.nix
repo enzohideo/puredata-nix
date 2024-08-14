@@ -39,7 +39,7 @@
       pkgs = pkgsFor.${system};
     in {
       ofelia = pkgs.callPackage ./packages/ofelia {
-        boost171 = boostFor.${system};
+        boost = boostFor.${system};
         glew = glewFor.${system};
       };
       ggee = pkgs.callPackage ./packages/ggee.nix {};
