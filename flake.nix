@@ -37,33 +37,27 @@
   in {
     packages = eachSystem (system: let
       pkgs = pkgsFor.${system};
-    in {
-      ofelia = pkgs.callPackage ./packages/ofelia {
+    in builtins.mapAttrs (name: value: pkgs.callPackage ./packages/${name} value) {
+      ggee = {};
+      iemguts = {};
+      iemlib = {};
+      ofelia = {
         boost = boostFor.${system};
         glew = glewFor.${system};
       };
-      ggee = pkgs.callPackage ./packages/ggee.nix {};
-      iemguts = pkgs.callPackage ./packages/iemguts.nix {};
-      iemlib = pkgs.callPackage ./packages/iemlib.nix {};
-      windowing = pkgs.callPackage ./packages/windowing.nix {};
+      windowing = {};
     });
 
     devShells = eachSystem (system: let
       pkgs = pkgsFor.${system};
     in {
-      default = pkgsFor.${system}.mkShell {
+      default = pkgs.mkShell {
         name = "puredata-shell";
         buildInputs = [
           (pkgs.puredata-with-plugins (with pkgs; [
             cyclone
             zexy
-          ] ++ (with self.packages.${system}; [
-            ofelia
-            ggee
-            iemguts
-            iemlib
-            windowing
-          ])))
+          ] ++ builtins.attrValues self.packages.${system}))
         ];
       };
     });

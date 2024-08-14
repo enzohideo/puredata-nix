@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , puredata
 }: let
-  base = (import ./pd-lib-builder.nix {
+  base = (import ../pd-lib-builder.nix {
     pname = "ggee";
     inherit puredata;
   });
