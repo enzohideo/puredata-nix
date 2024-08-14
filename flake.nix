@@ -38,14 +38,14 @@
     packages = eachSystem (system: let
       pkgs = pkgsFor.${system};
     in {
-      ofelia = pkgs.callPackage ./externals/ofelia {
+      ofelia = pkgs.callPackage ./packages/ofelia {
         boost171 = boostFor.${system};
         glew = glewFor.${system};
       };
-      ggee = pkgs.callPackage ./externals/ggee.nix {};
-      iemguts = pkgs.callPackage ./externals/iemguts.nix {};
-      iemlib = pkgs.callPackage ./externals/iemlib.nix {};
-      windowing = pkgs.callPackage ./externals/windowing.nix {};
+      ggee = pkgs.callPackage ./packages/ggee.nix {};
+      iemguts = pkgs.callPackage ./packages/iemguts.nix {};
+      iemlib = pkgs.callPackage ./packages/iemlib.nix {};
+      windowing = pkgs.callPackage ./packages/windowing.nix {};
     });
 
     devShells = eachSystem (system: let
