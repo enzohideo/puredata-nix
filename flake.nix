@@ -1,8 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
-    nixpkgs-boost.url = "nixpkgs/nixos-21.05";
-    nixpkgs-glew.url = "nixpkgs/nixos-20.03";
+    nixpkgs-boost.url = "nixpkgs/nixos-23.05";
   };
 
   outputs = { self, nixpkgs, systems, ... }@inputs : let
@@ -36,8 +35,7 @@
       iemguts = {};
       iemlib = {};
       ofelia = {
-        boost = inputs.nixpkgs-boost.legacyPackages.${system}.boost171;
-        glew = inputs.nixpkgs-glew.legacyPackages.${system}.glew;
+        boost = inputs.nixpkgs-boost.legacyPackages.${system}.boost174;
       };
       windowing = {};
     });

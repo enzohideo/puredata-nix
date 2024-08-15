@@ -8,13 +8,15 @@
 , glew
 }:
 
+# Compiled with openFrameworks 0.11.2
+# https://github.com/cuinjune/Ofelia/issues/79#issuecomment-1399175597
 stdenv.mkDerivation rec {
-  pname = "ofelia";
-  version = "v4.0.0";
+  pname = "ofelia-unstable";
+  version = "update/v4.1.0";
 
   src = fetchurl {
-    url = "https://github.com/cuinjune/Ofelia/releases/download/${version}/ofelia-${version}-.Linux-amd64-64.-externals.tar.gz";
-    hash = "sha256-IeU4GqNCXCo3/VEND03SF94lMCVmMKkf2AsFyC8Pa04=";
+    url = "https://github.com/cuinjune/Ofelia/files/10471494/ofelia_Linux.tar.gz";
+    hash = "sha256-YVrlMNFeLPs0rAJTjoMfE6GsMgb9gY/gjqzvdU2nZ6U=";
   };
 
   nativeBuildInputs = [
@@ -22,8 +24,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = with pkgs; [
-    puredata
-
     systemd
     poco
     openal
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
       shared = true;
     })
   ] ++ [
+    puredata
     boost
     glew
   ];
