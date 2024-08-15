@@ -51,7 +51,8 @@
     devShells = eachSystem (system: let
       pkgs = pkgsFor.${system};
     in {
-      default = pkgs.mkShell {
+      default = self.devShells.${system}.compmus;
+      compmus = pkgs.mkShell {
         name = "puredata-shell";
         buildInputs = [
           (pkgs.puredata-with-plugins (with pkgs; [
