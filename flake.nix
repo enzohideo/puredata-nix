@@ -28,12 +28,6 @@
         ];
       };
     });
-    boostFor = eachSystem (system: (import inputs.nixpkgs-boost {
-      inherit system;
-    }).boost171);
-    glewFor = eachSystem (system: (import inputs.nixpkgs-glew {
-      inherit system;
-    }).glew);
   in {
     packages = eachSystem (system: let
       pkgs = pkgsFor.${system};
@@ -42,8 +36,8 @@
       iemguts = {};
       iemlib = {};
       ofelia = {
-        boost = boostFor.${system};
-        glew = glewFor.${system};
+        boost = inputs.nixpkgs-boost.legacyPackages.${system}.boost171;
+        glew = inputs.nixpkgs-glew.legacyPackages.${system}.glew;
       };
       windowing = {};
     });
