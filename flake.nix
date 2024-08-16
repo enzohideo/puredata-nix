@@ -1,8 +1,6 @@
 {
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
-    nixpkgs-boost.url = "nixpkgs/nixos-21.05";
-    nixpkgs-glew.url = "nixpkgs/nixos-20.03";
   };
 
   outputs = { self, nixpkgs, systems, ... }@inputs : let
@@ -28,12 +26,6 @@
         ];
       };
     });
-    boostFor = eachSystem (system: (import inputs.nixpkgs-boost {
-      inherit system;
-    }).boost171);
-    glewFor = eachSystem (system: (import inputs.nixpkgs-glew {
-      inherit system;
-    }).glew);
   in {
     packages = eachSystem (system: let
       pkgs = pkgsFor.${system};
@@ -41,10 +33,7 @@
       ggee = {};
       iemguts = {};
       iemlib = {};
-      ofelia = {
-        boost = boostFor.${system};
-        glew = glewFor.${system};
-      };
+      ofelia = {};
       windowing = {};
     });
 

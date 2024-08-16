@@ -6,9 +6,13 @@
 , fetchurl
 , fetchpatch
 , pkgs
-}:
-
-stdenv.mkDerivation rec {
+}: let
+  libtess2 = (pkgs.callPackage ./libtess2.nix {});
+  kissfft = (pkgs.kissfft.override {
+    datatype = "float";
+    enableStatic = true;
+  });
+in stdenv.mkDerivation rec {
   pname = "openframeworks";
   version = "0.11.2";
 
@@ -26,9 +30,8 @@ stdenv.mkDerivation rec {
   ];
 
   env = {
-    # OF_ROOT = builtins.toString ./src;
-    LIBSPATH = "linux64";
-    CXXFLAGS = "-Wall -Wno-error -Wno-format-security";
+    # LIBSPATH = "linux64";
+    NIX_CFLAGS_COMPILE = "-Wno-error -Wno-format-security";
   };
 
   buildInputs = with pkgs; [
@@ -70,34 +73,32 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = with pkgs; [
-    # make
     pkg-config
-    # gcc
   ];
 
+  postPatch = ''
+    cp ${libtess2}/lib/libtess2.a libs/tess2/lib/linux64/libtess2.a
+    cp ${kissfft}/lib/libkissfft-float.a libs/kiss/lib/linux64/libkiss.a
+  '';
+
   buildPhase = ''
-    cd libs/openFrameworksCompiled/project
+    runHook preBuild
 
-    # make -s Debug -j $NIX_BUILD_CORES
-    make -s Release -j 3
+    make -s Debug -j $NIX_BUILD_CORES -C libs/openFrameworksCompiled/project
+    make -s Release -j $NIX_BUILD_CORES -C libs/openFrameworksCompiled/project
+    make -s Release -j $NIX_BUILD_CORES -C apps/projectGenerator/commandLine
 
-    cd -
-    cd apps/projectGenerator/commandLine
-
-    make -s Release -j 3
-
-    cd -
-    cd libs/openFrameworksCompiled/project
-
-    make -s Release -j 3
-
-    cd -
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/opt
     cp apps/projectGenerator/commandLine/bin/projectGenerator $out/bin/projectGenerator
     cp -R ./ $out/opt/openFrameworks
+
+    runHook postInstall
   '';
 
   meta = with lib; {

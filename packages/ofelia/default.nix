@@ -1,24 +1,53 @@
 { pkgs
 , lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , puredata
-, autoPatchelfHook
 , boost
 , glew
-}:
-
-stdenv.mkDerivation rec {
-  pname = "ofelia";
+, pkg-config
+}: let
+  openframeworks = (pkgs.callPackage ./openframeworks.nix {});
+in stdenv.mkDerivation rec {
+  pname = "ofelia-unstable";
   version = "v4.0.0";
 
-  src = fetchurl {
-    url = "https://github.com/cuinjune/Ofelia/releases/download/${version}/ofelia-${version}-.Linux-amd64-64.-externals.tar.gz";
-    hash = "sha256-IeU4GqNCXCo3/VEND03SF94lMCVmMKkf2AsFyC8Pa04=";
+  src = fetchFromGitHub {
+    owner = "cuinjune";
+    repo = "Ofelia";
+    rev = version;
+    hash = "sha256-h5QVV7lx0PxBRqnIOhnoxLRe0uEqjJGC+Aqixv9z4fI=";
   };
 
+  buildPhase = ''
+    runHook preBuild
+
+    cp --no-preserve=mode,ownership -R ${openframeworks}/opt/openFrameworks ./OF
+
+    shopt -s extglob dotglob
+    mkdir -p OF/addons/ofxOfelia
+    mv !(OF) OF/addons/ofxOfelia
+    shopt -u dotglob
+
+    make -j $NIX_BUILD_CORES -C OF/addons/ofxOfelia/LinuxExternal
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out
+    mv OF/addons/ofxOfelia/LinuxExternal/bin $out/ofelia
+    mv OF/addons/ofxOfelia/ofelia/* $out/ofelia
+
+    runHook postInstall
+  '';
+
+  env.NIX_CFLAGS_COMPILE = "-Wall -Wno-error -Wno-unused-function -Wno-format-security";
+
   nativeBuildInputs = [
-    autoPatchelfHook
+    pkg-config
   ];
 
   buildInputs = with pkgs; [
@@ -65,11 +94,6 @@ stdenv.mkDerivation rec {
     boost
     glew
   ];
-
-  installPhase = ''
-    mkdir -p $out/ofelia
-    cp -R ./ $out/ofelia
-  '';
 
   meta = with lib; {
     license = licenses.gpl3Only;
