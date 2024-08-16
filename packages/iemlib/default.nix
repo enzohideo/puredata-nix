@@ -13,7 +13,7 @@ in stdenv.mkDerivation (lib.mergeAttrs base rec {
 
   src = fetchgit {
     url = "https://git.iem.at/pd/iemlib";
-    hash = "sha256-RMrFA0R794r9pXGt9khKtfbeZqEyYLj+wScaaMJwMfQ=";
+    hash = "sha256-BzE09IVNONy34q2dpoRXzkvWEf0inYVcJK8OMareYJg=";
     rev = version;
   };
 
