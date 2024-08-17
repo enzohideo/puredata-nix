@@ -11,6 +11,14 @@
     pkgsFor = eachSystem (system: import nixpkgs {
       inherit system;
       config = {
+        packageOverrides = pkgs: {
+          puredata-with-plugins = (plugins: (pkgs.callPackage ./overlays/puredata.nix {
+            inherit plugins;
+            settings = ''
+              flags: -jack
+            '';
+          }));
+        };
         permittedInsecurePackages = [
           # Known issues:
           #  - CVE-2021-33367
