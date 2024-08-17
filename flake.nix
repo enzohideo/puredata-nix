@@ -49,6 +49,7 @@
       compmus = pkgs.mkShell {
         name = "puredata-shell";
         buildInputs = [
+          pkgs.tk # pd-gui
           (pkgs.puredata-with-plugins (with pkgs; [
             cyclone
             zexy
