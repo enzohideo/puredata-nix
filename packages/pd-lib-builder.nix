@@ -1,13 +1,9 @@
-{ puredata
-, pname
-}:
+{ puredata, pname }:
 
 {
   inherit pname;
 
-  buildInputs = [
-    puredata
-  ];
+  buildInputs = [ puredata ];
 
   makeFlags = [
     "pdincludepath=${puredata}/include/pd"

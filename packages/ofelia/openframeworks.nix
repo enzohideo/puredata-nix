@@ -1,11 +1,12 @@
 # This is not being used at the moment because I decided to patch ofelia's
 # binary instead.
 
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, pkgs
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkgs,
 }:
 
 stdenv.mkDerivation rec {
