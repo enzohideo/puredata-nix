@@ -55,6 +55,9 @@ Or use the example dev shell provided by this flake
 }
 ```
 
+> [!NOTE]
+> In this case you could also just type `nix develop github:enzohideo/puredata-nix`
+
 ### Ofelia/abs on Wayland
 
 Ofelia seems to segfault on wayland when using objects from ofelia/abs. As a
