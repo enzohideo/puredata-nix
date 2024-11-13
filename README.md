@@ -60,7 +60,7 @@ Or use the example dev shell provided by this flake
 Ofelia seems to segfault on wayland when using objects from ofelia/abs. As a
 temporary workaround, you can use gamescope.
 
-```
+```nix
 {
   inputs.puredata.url = "github:enzohideo/puredata-nix";
 
