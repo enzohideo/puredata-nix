@@ -24,13 +24,14 @@ Manually pick which externals you want to use
   outputs = { ... }@inputs: let
     system = "x86_64-linux";
     pkgs = inputs.nixpkgs.legacyPackages.${system};
+    extraPkgs = inputs.puredata.packages.${system};
   in {
     devShells.${system}.default = pkgs.mkShell {
       buildInputs = [
         (pkgs.puredata-with-plugins (with pkgs; [
           cyclone
           zexy
-        ] ++ (with inputs.puredata.packages.${system}; [
+        ] ++ (with extraPkgs; [
           ggee
           iemguts
           iemlib
